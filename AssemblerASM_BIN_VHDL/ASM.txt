@@ -22,18 +22,43 @@ STA @258
 LDI $0
 STA @0         # Constante 0
 LDI $1         # Constante 1
+STA @1
 
 # Inicializando posições que guardaram Unidades do contador
 # Reservado Endereco 10 a 19
 LDI $0
-STA @10       # Unidades
-STA @11       # Dezenas
-STA @12       # Centenas
-STA @13       # Unidade de Milhar
-STA @14       # Centena de Milhar
-STA @15       # Unidade de Milhão
+STA @10       # MEN[10] = Unidades
+STA @11       # MEN[11] = Dezenas
+STA @12       # MEN[12] = Centenas
+STA @13       # MEN[13] = Unidade de Milhar
+STA @14       # MEN[14] = Centena de Milhar
+STA @15       # MEN[15] = Unidade de Milhão
+
+JMP .MAIN    # Pula para Rotina Principal
+NOP
+
+# -------------- INCREMENTA CONTADOR ---------------
+.INCREMENTA_CONTADOR
+
+STA @511       # Endereco 511 : Limpa Flag FlipFlop KEY0
+LDA @10        # REGA = Unidade
+SOMA @1        # REGA = Unidade + 1
+STA @10        # MEN[10] = Unidade_incrementada
+STA @288       # HEX0 = Unidade
+STA @258       # Salva bit(0) do valor do contador em LEDR9
+JMP .VERIFICA_KEY0
+NOP
 
 # -------------- ROTINA PRINCIPAL -----------------
 .MAIN
 
-JMP .SETUP
+.VERIFICA_KEY0
+# Verifica estado do KEY0
+LDA @352                      # Lê KEY0
+OP_AND @1                     # Tira valores lixos dos outros 7bits
+CEQ @0                        # Verifica se foi apertado (KEY0 = 0 ?)
+JEQ .VERIFICA_KEY0            # NAO APERTADO
+NOP
+JSR .INCREMENTA_CONTADOR      # APERTADO
+NOP
+NOP
