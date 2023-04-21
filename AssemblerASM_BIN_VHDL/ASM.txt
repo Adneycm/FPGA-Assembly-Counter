@@ -18,7 +18,7 @@ NOP
 # Aqui
 .LABEL
 .MAIS_UM
-LDI $4	#Carrega acumulador com valor 4
+LDI $4	
 CEQ @0	#Compara com valor 5, deve fazer o flagIgual ser 0
 JEQ @3	#Não deve ocorrer o desvio
 JMP @13	#Fim. Deve ficar neste laço

@@ -184,8 +184,11 @@ def main(fileASM , fileBIN):
             instrucao = instrucao.replace("\n", "") 
               
             # Formata
-            line = 'tmp(' + str(count) + ') := ' + opcode + number_hex_format + ';\t-- #' + instrucao + '\t-- ' + comentario + '\n'
-                                                                                                                                
+            if (comentario  == instrucao):
+                line = 'tmp(' + str(count) + ') := ' + opcode + number_hex_format + ';\t-- #' + instrucao + '\n'
+            else:
+                line = 'tmp(' + str(count) + ') := ' + opcode + number_hex_format + ';\t-- #' + instrucao + '\t-- ' + comentario + '\n'
+                                                                                                                                    
             count+=1 
             f.write(line)
 
