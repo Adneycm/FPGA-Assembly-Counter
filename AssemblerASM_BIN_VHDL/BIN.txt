@@ -4,18 +4,18 @@
 
 -- Limpa Displays
 tmp(0) := LDI & '0' & x"00";	-- #LDI $0
-tmp(1) := STA & '0' & x"20";	-- #STA @288
-tmp(2) := STA & '0' & x"21";	-- #STA @289
-tmp(3) := STA & '0' & x"22";	-- #STA @290
-tmp(4) := STA & '0' & x"23";	-- #STA @291
-tmp(5) := STA & '0' & x"24";	-- #STA @292
-tmp(6) := STA & '0' & x"25";	-- #STA @293
+tmp(1) := STA & '1' & x"20";	-- #STA @288
+tmp(2) := STA & '1' & x"21";	-- #STA @289
+tmp(3) := STA & '1' & x"22";	-- #STA @290
+tmp(4) := STA & '1' & x"23";	-- #STA @291
+tmp(5) := STA & '1' & x"24";	-- #STA @292
+tmp(6) := STA & '1' & x"25";	-- #STA @293
 
 -- Limpa Leds
 tmp(7) := LDI & '0' & x"00";	-- #LDI $0
-tmp(8) := STA & '0' & x"00";	-- #STA @256
-tmp(9) := STA & '0' & x"01";	-- #STA @257
-tmp(10) := STA & '0' & x"02";	-- #STA @258
+tmp(8) := STA & '1' & x"00";	-- #STA @256
+tmp(9) := STA & '1' & x"01";	-- #STA @257
+tmp(10) := STA & '1' & x"02";	-- #STA @258
 
 --  Inicializando posicao de constantes imutáveis
 --  Reservado Endereco 0 a 9

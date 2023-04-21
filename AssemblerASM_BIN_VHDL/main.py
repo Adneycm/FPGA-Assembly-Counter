@@ -13,11 +13,13 @@ def  converteArroba(line):
     line = line.split('@')
     if(int(line[1]) > 255 ):
         number = str(int(line[1]) - 256)
+        number_plus = '1'
     else:
         number = line[1]
+        number_plus = '0'
 
     hex_number = hex(int(number))[2:].upper().zfill(2)
-    number_format = " & '0' & x\"" + hex_number + "\""
+    number_format = " & " + "\'" + number_plus + "\'" +" & x\"" + hex_number + "\""
 
     return number_format
   
@@ -33,11 +35,13 @@ def  converteCifrao(line):
     line = line.split('$')
     if(int(line[1]) > 255 ):
         number = str(int(line[1]) - 256)
+        number_plus = '1'
     else:
         number = line[1]
+        number_plus = '0'
 
     hex_number = hex(int(number))[2:].upper().zfill(2)
-    number_format = " & '0' & x\"" + hex_number + "\""
+    number_format = " & " + "\'" + number_plus + "\'" +" & x\"" + hex_number + "\""
     
     return number_format
 
