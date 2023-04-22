@@ -72,58 +72,82 @@ tmp(23) := STA & '0' & x"0F";	-- #STA @15       	--  MEN[15] = Unidade de Milhã
 --  LÓGICA DO CONTADOR
 tmp(24) := LDA & '1' & x"60";	-- LDA @352 Carrega o acumulador com a leitura do botão KEY0
 tmp(25) := CEQ & '0' & x"01";	-- CEQ @1   Compara com valor armazenado em MEM[1]
-tmp(26) := JEQ & '0' & x"1D";	-- JEQ @29  Pula para SUB-rotina soma unidades
+tmp(26) := JEQ & '0' & x"21";	-- JEQ @33  Pula para SUB-rotina soma unidades
 tmp(27) := NOP & '0' & x"00"; -- NOP
-tmp(28) := JMP & '0' & x"18";	-- JMP @24 
+
+tmp(28) := LDA & '1' & x"64";	-- LDA @356 Carrega o acumulador com a leitura do botão FPGA_RESET
+tmp(29) := CEQ & '0' & x"00";	-- CEQ @0   Compara com valor armazenado em MEM[0]
+tmp(30) := JEQ & '0' & x"40";	-- JEQ @64  Pula para SUB-rotina reset
+tmp(31) := NOP & '0' & x"00"; -- NOP
+
+tmp(32) := JMP & '0' & x"18";	-- JMP @24 
+
 
 
 --  SUB-rotina soma unidades
-tmp(29) := STA  & '1' & x"FF"; -- Limpa flipflop KEY0
-tmp(30) := LDA  & '0' & x"0A"; -- LDA @10   Carrega o acumulador com o valor de MEM[10] (unidades)
+tmp(33) := STA  & '1' & x"FF"; -- Limpa flipflop KEY0
+tmp(34) := LDA  & '0' & x"0A"; -- LDA @10   Carrega o acumulador com o valor de MEM[10] (unidades)
 
-tmp(31) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
-tmp(32) := JEQ  & '0' & x"26"; -- JEQ @38  Se o digito for igual a 9, pula para SUB-rotina soma dezenas
+tmp(35) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
+tmp(36) := JEQ  & '0' & x"2A"; -- JEQ @42  Se o digito for igual a 9, pula para SUB-rotina soma dezenas
 
-tmp(33) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
-tmp(34) := STA  & '0' & x"0A"; -- STA @10  Armazena o valor do acumulador em MEM[10] (unidades)
-tmp(35) := STA  & '1' & x"20"; -- STA @288 Armazena o valor do acumulador em HEX0
-tmp(36) := JMP  & '0' & x"18"; -- JMP @24
-tmp(37) := NOP  & '0' & x"00"; -- #NOP
+tmp(37) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
+tmp(38) := STA  & '0' & x"0A"; -- STA @10  Armazena o valor do acumulador em MEM[10] (unidades)
+tmp(39) := STA  & '1' & x"20"; -- STA @288 Armazena o valor do acumulador em HEX0
+tmp(40) := JMP  & '0' & x"18"; -- JMP @24
+tmp(41) := NOP  & '0' & x"00"; -- #NOP
 ------------------------------
 
 --  SUB-rotina soma dezenas
-tmp(38) := LDI  & '0' & x"00"; -- LDI $0 --  Constante 0
-tmp(39) := STA  & '0' & x"0A"; -- STA @10  Armazena o valor do acumulador em MEM[10] (unidades)
-tmp(40) := STA  & '1' & x"20"; -- STA @288 Armazena o valor do acumulador em HEX0
+tmp(42) := LDI  & '0' & x"00"; -- LDI $0 --  Constante 0
+tmp(43) := STA  & '0' & x"0A"; -- STA @10  Armazena o valor do acumulador em MEM[10] (unidades)
+tmp(44) := STA  & '1' & x"20"; -- STA @288 Armazena o valor do acumulador em HEX0
 
-tmp(41) := LDA  & '0' & x"0B"; -- LDA @11   Carrega o acumulador com o valor de MEM[11] (dezenas)
-tmp(42) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
-tmp(43) := JEQ  & '0' & x"31"; -- JEQ @49  Se o digito for igual a 9, pula para SUB-rotina soma centenas
+tmp(45) := LDA  & '0' & x"0B"; -- LDA @11   Carrega o acumulador com o valor de MEM[11] (dezenas)
+tmp(46) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
+tmp(47) := JEQ  & '0' & x"35"; -- JEQ @53  Se o digito for igual a 9, pula para SUB-rotina soma centenas
 
-tmp(44) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
-tmp(45) := STA  & '0' & x"0B"; -- STA @11  Armazena o valor do acumulador em MEM[11] (dezenas)
-tmp(46) := STA  & '1' & x"21"; -- STA @289 Armazena o valor do acumulador em HEX1
-tmp(47) := JMP  & '0' & x"18"; -- JMP @24
-tmp(48) := NOP  & '0' & x"00"; -- #NOP
+tmp(48) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
+tmp(49) := STA  & '0' & x"0B"; -- STA @11  Armazena o valor do acumulador em MEM[11] (dezenas)
+tmp(50) := STA  & '1' & x"21"; -- STA @289 Armazena o valor do acumulador em HEX1
+tmp(51) := JMP  & '0' & x"18"; -- JMP @24
+tmp(52) := NOP  & '0' & x"00"; -- #NOP
 ------------------------------
 
 --  SUB-rotina soma centenas
-tmp(49) := LDI  & '0' & x"00"; -- LDI $0 --  Constante 0
-tmp(50) := STA  & '0' & x"0B"; -- STA @11  Armazena o valor do acumulador em MEM[11] (dezenas)
-tmp(51) := STA  & '1' & x"21"; -- STA @289 Armazena o valor do acumulador em HEX1
+tmp(53) := LDI  & '0' & x"00"; -- LDI $0 --  Constante 0
+tmp(54) := STA  & '0' & x"0B"; -- STA @11  Armazena o valor do acumulador em MEM[11] (dezenas)
+tmp(55) := STA  & '1' & x"21"; -- STA @289 Armazena o valor do acumulador em HEX1
 
-tmp(52) := LDA  & '0' & x"0C"; -- LDA @12   Carrega o acumulador com o valor de MEM[12] (centenas)
-tmp(53) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
-tmp(54) := JEQ  & '0' & x"3C"; -- JEQ @60  Se o digito for igual a 9, pula para SUB-rotina soma centenas
+tmp(56) := LDA  & '0' & x"0C"; -- LDA @12   Carrega o acumulador com o valor de MEM[12] (centenas)
+tmp(57) := CEQ  & '0' & x"09"; -- CEQ @9   Verifica se o digito é igual a 9
+tmp(58) := JEQ  & '0' & x"3C"; -- JEQ @60  Se o digito for igual a 9, pula para SUB-rotina soma centenas
 
-tmp(55) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
-tmp(56) := STA  & '0' & x"0C"; -- STA @12  Armazena o valor do acumulador em MEM[12] (centenas)
-tmp(57) := STA  & '1' & x"22"; -- STA @290 Armazena o valor do acumulador em HEX2
-tmp(58) := JMP  & '0' & x"18"; -- JMP @24
-tmp(59) := NOP  & '0' & x"00"; -- #NOP
+tmp(59) := SOMA & '0' & x"01"; -- SOMA @1  Soma acumulador com valor da MEM[1] (1)
+tmp(60) := STA  & '0' & x"0C"; -- STA @12  Armazena o valor do acumulador em MEM[12] (centenas)
+tmp(61) := STA  & '1' & x"22"; -- STA @290 Armazena o valor do acumulador em HEX2
+tmp(62) := JMP  & '0' & x"18"; -- JMP @24
+tmp(63) := NOP  & '0' & x"00"; -- #NOP
 ------------------------------
 
-tmp(60) := NOP  & '0' & x"00"; -- #NOP
+--  SUB-rotina reset
+tmp(64) := LDI  & '0' & x"00"; -- LDI $0 --  Constante 0
+
+tmp(65) := STA  & '0' & x"0A"; -- STA @10  Armazena o valor do acumulador em MEM[10] (unidades)
+tmp(66) := STA  & '1' & x"20"; -- STA @288 Armazena o valor do acumulador em HEX0
+
+tmp(67) := STA  & '0' & x"0B"; -- STA @11  Armazena o valor do acumulador em MEM[11] (dezenas)
+tmp(68) := STA  & '1' & x"21"; -- STA @289 Armazena o valor do acumulador em HEX1
+
+tmp(69) := STA  & '0' & x"0C"; -- STA @12  Armazena o valor do acumulador em MEM[12] (centenas)
+tmp(70) := STA  & '1' & x"22"; -- STA @290 Armazena o valor do acumulador em HEX2
+
+tmp(71) := JMP  & '0' & x"18"; -- JMP @24
+tmp(72) := NOP  & '0' & x"00"; -- #NOP
+------------------------------
+
+tmp(67) := NOP  & '0' & x"00"; -- #NOP
+
 						
         return tmp;
     end initMemory;
