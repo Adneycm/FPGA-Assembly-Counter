@@ -21,8 +21,10 @@ STA @258
 # Reservado Endereco 0 a 9
 LDI $0
 STA @0         # Constante 0
-LDI $1         # Constante 1
-STA @1
+LDI $1         
+STA @1         # Constante 1
+LDI $9
+STA @9         # Constante 9  
 
 # Inicializando posições que guardaram Unidades do contador
 # Reservado Endereco 10 a 19
@@ -42,10 +44,31 @@ NOP
 
 STA @511       # Endereco 511 : Limpa Flag FlipFlop KEY0
 LDA @10        # REGA = Unidade
+
+# Verifica se valor da unidade é igual a 9:
+CEQ @9         # Unidade já é = 9?
+JEQ .DEZENA    # SIM : Incrementa dezena
+NOP
+JEQ .UNIDADE   # NÃO : Incrementa unidade
+NOP 
+
+# ------- Incrementa  Unidade
+.UNIDADE
 SOMA @1        # REGA = Unidade + 1
 STA @10        # MEN[10] = Unidade_incrementada
 STA @288       # HEX0 = Unidade
-STA @258       # Salva bit(0) do valor do contador em LEDR9
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Incrementa  Dezena
+.DEZENA
+# Zera unidade
+LDI $0
+STA @10
+STA @288       # HEX0 = Unidade
+
+# ------- FIM INCREMENTO
+.FIM_INCREMENTO
 JMP .VERIFICA_KEY0
 NOP
 
@@ -54,7 +77,7 @@ NOP
 
 .VERIFICA_KEY0
 # Verifica estado do KEY0
-LDA @352                      # Lê KEY0
+LDA @352                      # Lê KEY0 
 OP_AND @1                     # Tira valores lixos dos outros 7bits
 CEQ @0                        # Verifica se foi apertado (KEY0 = 0 ?)
 JEQ .VERIFICA_KEY0            # NAO APERTADO
