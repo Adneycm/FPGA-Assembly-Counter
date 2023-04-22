@@ -78,7 +78,6 @@ NOP
 .VERIFICA_KEY0
 # Verifica estado do KEY0
 LDA @352                      # Lê KEY0 
-OP_AND @1                     # Tira valores lixos dos outros 7bits
 CEQ @0                        # Verifica se foi apertado (KEY0 = 0 ?)
 JEQ .VERIFICA_KEY0            # NAO APERTADO
 NOP

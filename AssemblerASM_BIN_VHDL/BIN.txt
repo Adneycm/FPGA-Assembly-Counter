@@ -78,10 +78,9 @@ tmp(42) := NOP & '0' & x"00";	-- #NOP
 
 --  Verifica estado do KEY0
 tmp(43) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
-tmp(44) := OP_AND & '0' & x"01";	-- #OP_AND @1                     	--  Tira valores lixos dos outros 7bits
-tmp(45) := CEQ & '0' & x"00";	-- #CEQ @0                        	--  Verifica se foi apertado (KEY0 = 0 ?)
-tmp(46) := JEQ & '0' & x"2B";	-- #JEQ @43	--  NAO APERTADO
-tmp(47) := NOP & '0' & x"00";	-- #NOP
-tmp(48) := JSR & '0' & x"1A";	-- #JSR @26	--  APERTADO
+tmp(44) := CEQ & '0' & x"00";	-- #CEQ @0                        	--  Verifica se foi apertado (KEY0 = 0 ?)
+tmp(45) := JEQ & '0' & x"2B";	-- #JEQ @43	--  NAO APERTADO
+tmp(46) := NOP & '0' & x"00";	-- #NOP
+tmp(47) := JSR & '0' & x"1A";	-- #JSR @26	--  APERTADO
+tmp(48) := NOP & '0' & x"00";	-- #NOP
 tmp(49) := NOP & '0' & x"00";	-- #NOP
-tmp(50) := NOP & '0' & x"00";	-- #NOP
