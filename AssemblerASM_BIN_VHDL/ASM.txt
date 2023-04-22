@@ -33,8 +33,8 @@ STA @10       # MEN[10] = Unidades
 STA @11       # MEN[11] = Dezenas
 STA @12       # MEN[12] = Centenas
 STA @13       # MEN[13] = Unidade de Milhar
-STA @14       # MEN[14] = Centena de Milhar
-STA @15       # MEN[15] = Unidade de Milhão
+STA @14       # MEN[14] = Dezena de Milhar
+STA @15       # MEN[15] = Centena de MIlhar
 
 JMP .MAIN    # Pula para Rotina Principal
 NOP
@@ -66,6 +66,61 @@ NOP
 LDI $0
 STA @10
 STA @288       # HEX0 = Unidade
+
+LDA @11        # Dezena já é 9 ? 
+CEQ @9         
+JEQ .CENTENA   # Sim
+
+LDA @11        # Carrega dezena
+SOMA @1
+STA @11        # MEN[11] = Dezena_incrementada
+STA @289       # HEX1 = Dezena
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Incrementa  Centena
+.CENTENA
+# Zera dezena
+LDI $0
+STA @11
+STA @289
+
+LDA @12        # Centena já é 9?
+CEQ @9
+JEQ .UNIDADE_MILHAR
+
+LDA @12        # Carrega centena
+SOMA @1
+STA @12        # MEN[12] = Centena_incrementada
+STA @290       # HEX2 = Centena
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Incrementa Unidade de Milhar
+.UNIDADE_MILHAR
+# Zera centena
+LDI $0
+STA @12
+STA @290
+
+LDA @13        # Unidade de milhar já é 9?
+CEQ @9
+JEQ .DEZENA_MILHAR
+
+LDA @13       # Carrega unidade de milhar
+SOMA @1
+STA @13
+STA @291      # HEX3 = Unidade de milhar
+
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Incrementa Dezena de Milhar
+.DEZENA_MILHAR
+# Zera unidade de milhar
+LDI $0
+STA @13
+STA @291
 
 # ------- FIM INCREMENTO
 .FIM_INCREMENTO

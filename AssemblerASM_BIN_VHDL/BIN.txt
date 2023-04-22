@@ -33,10 +33,10 @@ tmp(18) := STA & '0' & x"0A";	-- #STA @10       	--  MEN[10] = Unidades
 tmp(19) := STA & '0' & x"0B";	-- #STA @11       	--  MEN[11] = Dezenas
 tmp(20) := STA & '0' & x"0C";	-- #STA @12       	--  MEN[12] = Centenas
 tmp(21) := STA & '0' & x"0D";	-- #STA @13       	--  MEN[13] = Unidade de Milhar
-tmp(22) := STA & '0' & x"0E";	-- #STA @14       	--  MEN[14] = Centena de Milhar
-tmp(23) := STA & '0' & x"0F";	-- #STA @15       	--  MEN[15] = Unidade de Milhão
+tmp(22) := STA & '0' & x"0E";	-- #STA @14       	--  MEN[14] = Dezena de Milhar
+tmp(23) := STA & '0' & x"0F";	-- #STA @15       	--  MEN[15] = Centena de MIlhar
 
-tmp(24) := JMP & '0' & x"2B";	-- #JMP @43	--  Pula para Rotina Principal
+tmp(24) := JMP & '0' & x"4F";	-- #JMP @79	--  Pula para Rotina Principal
 tmp(25) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- INCREMENTA CONTADOR ---------------
@@ -57,7 +57,7 @@ tmp(32) := NOP & '0' & x"00";	-- #NOP
 tmp(33) := SOMA & '0' & x"01";	-- #SOMA @1        	--  REGA = Unidade + 1
 tmp(34) := STA & '0' & x"0A";	-- #STA @10        	--  MEN[10] = Unidade_incrementada
 tmp(35) := STA & '1' & x"20";	-- #STA @288       	--  HEX0 = Unidade
-tmp(36) := JMP & '0' & x"29";	-- #JMP @41	-- JMP .FIM_INCREMENTO
+tmp(36) := JMP & '0' & x"4D";	-- #JMP @77	-- JMP .FIM_INCREMENTO
 tmp(37) := NOP & '0' & x"00";	-- #NOP
 
 --  ------- Incrementa  Dezena
@@ -67,20 +67,73 @@ tmp(38) := LDI & '0' & x"00";	-- #LDI $0
 tmp(39) := STA & '0' & x"0A";	-- #STA @10
 tmp(40) := STA & '1' & x"20";	-- #STA @288       	--  HEX0 = Unidade
 
+tmp(41) := LDA & '0' & x"0B";	-- #LDA @11        	--  Dezena já é 9 ? 
+tmp(42) := CEQ & '0' & x"09";	-- #CEQ @9         
+tmp(43) := JEQ & '0' & x"32";	-- #JEQ @50	--  Sim
+
+tmp(44) := LDA & '0' & x"0B";	-- #LDA @11        	--  Carrega dezena
+tmp(45) := SOMA & '0' & x"01";	-- #SOMA @1
+tmp(46) := STA & '0' & x"0B";	-- #STA @11        	--  MEN[11] = Dezena_incrementada
+tmp(47) := STA & '1' & x"21";	-- #STA @289       	--  HEX1 = Dezena
+tmp(48) := JMP & '0' & x"4D";	-- #JMP @77	-- JMP .FIM_INCREMENTO
+tmp(49) := NOP & '0' & x"00";	-- #NOP
+
+--  ------- Incrementa  Centena
+
+--  Zera dezena
+tmp(50) := LDI & '0' & x"00";	-- #LDI $0
+tmp(51) := STA & '0' & x"0B";	-- #STA @11
+tmp(52) := STA & '1' & x"21";	-- #STA @289
+
+tmp(53) := LDA & '0' & x"0C";	-- #LDA @12        	--  Centena já é 9?
+tmp(54) := CEQ & '0' & x"09";	-- #CEQ @9
+tmp(55) := JEQ & '0' & x"3E";	-- #JEQ @62	-- JEQ .UNIDADE_MILHAR
+
+tmp(56) := LDA & '0' & x"0C";	-- #LDA @12        	--  Carrega centena
+tmp(57) := SOMA & '0' & x"01";	-- #SOMA @1
+tmp(58) := STA & '0' & x"0C";	-- #STA @12        	--  MEN[12] = Centena_incrementada
+tmp(59) := STA & '1' & x"22";	-- #STA @290       	--  HEX2 = Centena
+tmp(60) := JMP & '0' & x"4D";	-- #JMP @77	-- JMP .FIM_INCREMENTO
+tmp(61) := NOP & '0' & x"00";	-- #NOP
+
+--  ------- Incrementa Unidade de Milhar
+
+--  Zera centena
+tmp(62) := LDI & '0' & x"00";	-- #LDI $0
+tmp(63) := STA & '0' & x"0C";	-- #STA @12
+tmp(64) := STA & '1' & x"22";	-- #STA @290
+
+tmp(65) := LDA & '0' & x"0D";	-- #LDA @13        	--  Unidade de milhar já é 9?
+tmp(66) := CEQ & '0' & x"09";	-- #CEQ @9
+tmp(67) := JEQ & '0' & x"4A";	-- #JEQ @74	-- JEQ .DEZENA_MILHAR
+
+tmp(68) := LDA & '0' & x"0D";	-- #LDA @13       	--  Carrega unidade de milhar
+tmp(69) := SOMA & '0' & x"01";	-- #SOMA @1
+tmp(70) := STA & '0' & x"0D";	-- #STA @13
+tmp(71) := STA & '1' & x"23";	-- #STA @291      	--  HEX3 = Unidade de milhar
+
+tmp(72) := JMP & '0' & x"4D";	-- #JMP @77	-- JMP .FIM_INCREMENTO
+tmp(73) := NOP & '0' & x"00";	-- #NOP
+
+--  ------- Incrementa Dezena de Milhar
+
+--  Zera unidade de milhar
+tmp(74) := LDI & '0' & x"00";	-- #LDI $0
+tmp(75) := STA & '0' & x"0D";	-- #STA @13
+tmp(76) := STA & '1' & x"23";	-- #STA @291
+
 --  ------- FIM INCREMENTO
 
-tmp(41) := JMP & '0' & x"2B";	-- #JMP @43	-- JMP .VERIFICA_KEY0
-tmp(42) := NOP & '0' & x"00";	-- #NOP
+tmp(77) := JMP & '0' & x"4F";	-- #JMP @79	-- JMP .VERIFICA_KEY0
+tmp(78) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- ROTINA PRINCIPAL -----------------
 
-
-
 --  Verifica estado do KEY0
-tmp(43) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
-tmp(44) := CEQ & '0' & x"00";	-- #CEQ @0                        	--  Verifica se foi apertado (KEY0 = 0 ?)
-tmp(45) := JEQ & '0' & x"2B";	-- #JEQ @43	--  NAO APERTADO
-tmp(46) := NOP & '0' & x"00";	-- #NOP
-tmp(47) := JSR & '0' & x"1A";	-- #JSR @26	--  APERTADO
-tmp(48) := NOP & '0' & x"00";	-- #NOP
-tmp(49) := NOP & '0' & x"00";	-- #NOP
+tmp(79) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
+tmp(80) := CEQ & '0' & x"00";	-- #CEQ @0                        	--  Verifica se foi apertado (KEY0 = 0 ?)
+tmp(81) := JEQ & '0' & x"4F";	-- #JEQ @79	--  NAO APERTADO
+tmp(82) := NOP & '0' & x"00";	-- #NOP
+tmp(83) := JSR & '0' & x"1A";	-- #JSR @26	--  APERTADO
+tmp(84) := NOP & '0' & x"00";	-- #NOP
+tmp(85) := NOP & '0' & x"00";	-- #NOP
