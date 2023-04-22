@@ -55,7 +55,7 @@ NOP
 # ------- Incrementa  Unidade
 .UNIDADE
 SOMA @1        # REGA = Unidade + 1
-STA @10        # MEN[10] = Unidade_incrementada
+STA @10        
 STA @288       # HEX0 = Unidade
 JMP .FIM_INCREMENTO
 NOP
@@ -73,7 +73,7 @@ JEQ .CENTENA   # Sim
 
 LDA @11        # Carrega dezena
 SOMA @1
-STA @11        # MEN[11] = Dezena_incrementada
+STA @11        
 STA @289       # HEX1 = Dezena
 JMP .FIM_INCREMENTO
 NOP
@@ -91,7 +91,7 @@ JEQ .UNIDADE_MILHAR
 
 LDA @12        # Carrega centena
 SOMA @1
-STA @12        # MEN[12] = Centena_incrementada
+STA @12        
 STA @290       # HEX2 = Centena
 JMP .FIM_INCREMENTO
 NOP
@@ -121,6 +121,43 @@ NOP
 LDI $0
 STA @13
 STA @291
+
+LDA @14      # Dezena de Milhar já é 9?
+CEQ @9
+JEQ .CENTENA_MILHAR
+
+LDA @14       # Carrega dezena de milhar
+SOMA @1
+STA @14
+STA @292      # HEX4 = Unidade de milhar
+
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Incrementa Centena de Milhar
+.CENTENA_MILHAR
+# Zera dezena de milhar
+LDI $0
+STA @14
+STA @292
+
+LDA @15      # Centena de Milhar já é 9?
+CEQ @9
+JEQ .ZERA_CENTENA_MILHAR
+
+LDA @15       # Carrega dezena de milhar
+SOMA @1
+STA @15
+STA @293      # HEX5 = Centena de milhar
+
+JMP .FIM_INCREMENTO
+NOP
+
+#Zera centena de milhar
+.ZERA_CENTENA_MILHAR
+LDI $0
+STA @15
+STA @293
 
 # ------- FIM INCREMENTO
 .FIM_INCREMENTO
