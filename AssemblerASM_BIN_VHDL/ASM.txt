@@ -36,6 +36,16 @@ STA @13       # MEN[13] = Unidade de Milhar
 STA @14       # MEN[14] = Dezena de Milhar
 STA @15       # MEN[15] = Centena de MIlhar
 
+# Inicializando posições que guardaram Limite Contador
+# Reservado Endereco 20 a 29
+LDI $0
+STA @20       # MEN[20] = Unidades
+STA @21       # MEN[21] = Dezenas
+STA @22       # MEN[22] = Centenas
+STA @23       # MEN[23] = Unidade de Milhar
+STA @24       # MEN[24] = Dezena de Milhar
+STA @25       # MEN[25] = Centena de MIlhar
+
 JMP .MAIN    # Pula para Rotina Principal
 NOP
 
@@ -164,6 +174,29 @@ STA @293
 JMP .MAIN
 NOP
 
+# --------------- LIMPA LIMITE    ----------------
+.LIMPA_LIMITE
+
+#Limpa Displays
+LDI $0
+STA @288
+STA @289
+STA @290
+STA @291
+STA @292
+STA @293
+
+# Limpa valores guardados no contador
+LDI $0
+STA @10       # MEN[10] = Unidades
+STA @11       # MEN[11] = Dezenas
+STA @12       # MEN[12] = Centenas
+STA @13       # MEN[13] = Unidade de Milhar
+STA @14       # MEN[14] = Dezena de Milhar
+STA @15       # MEN[15] = Centena de MIlhar
+
+JMP .SET_UNIDADE
+
 # --------------- LIMITE CONTADOR ----------------
 .LIMITE_CONTADOR
 
@@ -175,7 +208,29 @@ CEQ @0
 JEQ .FIM_LIMITE_CONTADOR      # Deseleciona Modo : FIM_LIMITE_CONTADOR
 NOP
 
-# Subrotina configura unidade
+# Limpa posições de memoria e displays
+JMP .LIMPA_LIMITE 
+
+# Seta valor Unidade
+.SET_UNIDADE
+LDI $1
+STA @256                     # LEDR1 -> Indicativo limite Unidade
+
+LDA @320                     # Lê chaves
+STA @20                      # Salva valor limite unidade em MEN[20]
+STA @288                     # HEX0 = Valor da unidade setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta Dezena  ; 0 -> Seta Unidade) 
+CEQ @1 
+JEQ .SET_DEZENA
+NOP
+JMP .SET_UNIDADE
+NOP
+
+# Seta valor unidade
+.SET_DEZENA
+LDI $2
+STA @256                     # LEDR2 -> Indicativo limite Dezena
 
 JMP .LIMITE_CONTADOR
 NOP
@@ -190,7 +245,6 @@ NOP
 # -------------- ROTINA PRINCIPAL -----------------
 .MAIN
 
-# Verifica estado do KEY0
 LDA @352                      # Lê KEY0 
 CEQ @1                        
 JEQ .INCREMENTA_CONTADOR      # APERTADO
