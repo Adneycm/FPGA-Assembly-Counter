@@ -203,16 +203,12 @@ JMP .SET_UNIDADE
 LDI $1
 STA @258                      # Indicativo de que esse modo foi selecionado. LEDR9
 
-LDA @322                      
-CEQ @0
-JEQ .FIM_LIMITE_CONTADOR      # Deseleciona Modo : FIM_LIMITE_CONTADOR
-NOP
-
 # Limpa posições de memoria e displays
 JMP .LIMPA_LIMITE 
 
-# Seta valor Unidade
+# ------ Seta valor Unidade
 .SET_UNIDADE
+
 LDI $1
 STA @256                     # LEDR1 -> Indicativo limite Unidade
 
@@ -227,18 +223,116 @@ NOP
 JMP .SET_UNIDADE
 NOP
 
-# Seta valor unidade
+# ------ Seta valor Dezena
 .SET_DEZENA
+
+STA @510                     # Limpa KEY1
+
 LDI $2
 STA @256                     # LEDR2 -> Indicativo limite Dezena
 
-JMP .LIMITE_CONTADOR
+LDA @320                     # Lê chaves
+STA @21                      # Salva valor limite dezena em MEN[21]
+STA @289                     # HEX1 = Valor da dezena setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta Centena  ; 0 -> Seta Dezena) 
+CEQ @1 
+JEQ .SET_CENTENA
+NOP
+JMP .SET_DEZENA
 NOP
 
-# Desativa modo Limite Contador
+# ------ Seta valor Centena
+.SET_CENTENA
+
+STA @510                     # Limpa KEY1
+
+LDI $4
+STA @256                     # LEDR3 -> Indicativo limite Centena
+
+LDA @320                     # Lê chaves
+STA @22                      # Salva valor limite centena em MEN[22]
+STA @290                     # HEX2 = Valor da dezena setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta Unidade Milhar  ; 0 -> Seta Centena) 
+CEQ @1 
+JEQ .SET_UNIDADE_MILHAR
+NOP
+JMP .SET_CENTENA
+NOP
+
+# ------ Seta valor Unidade de Milhar
+.SET_UNIDADE_MILHAR
+
+STA @510                     # Limpa KEY1
+
+LDI $8
+STA @256                     # LEDR4 -> Indicativo limite Centena
+
+LDA @320                     # Lê chaves
+STA @23                      # Salva valor limite unidade de milhar em MEN[23]
+STA @291                     # HEX3 = Valor da dezena setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta Dezena Milhar  ; 0 -> Seta Unidade de Milhar) 
+CEQ @1 
+JEQ .SET_DEZENA_MILHAR
+NOP
+JMP .SET_UNIDADE_MILHAR
+NOP
+
+# ------ Seta valor Dezena de Milhar
+.SET_DEZENA_MILHAR
+
+STA @510                     # Limpa KEY1
+
+LDI $16
+STA @256                     # LEDR5 -> Indicativo limite Centena
+
+LDA @320                     # Lê chaves
+STA @24                      # Salva valor limite unidade de milhar em MEN[24]
+STA @292                     # HEX4 = Valor da dezena setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+CEQ @1 
+JEQ .SET_CENTENA_MILHAR
+NOP
+JMP .SET_DEZENA_MILHAR
+NOP
+
+
+# ------ Seta valor Dezena de Milhar
+.SET_CENTENA_MILHAR
+
+STA @510                     # Limpa KEY1
+
+LDI $32
+STA @256                     # LEDR5 -> Indicativo limite Centena
+
+LDA @320                     # Lê chaves
+STA @25                      # Salva valor limite unidade de milhar em MEN[25]
+STA @293                     # HEX4 = Valor da dezena setado
+
+LDA @353                     # Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+CEQ @1 
+JEQ .FIM_LIMITE_CONTADOR
+NOP
+JMP .SET_CENTENA_MILHAR
+NOP
+
+# ------ Desativa modo Limite Contador
 .FIM_LIMITE_CONTADOR
 LDI $0                        # LEDR9 = 0
-STA @258 
+STA @258
+
+# Limpa Displays
+LDI $0
+STA @288
+STA @289
+STA @290
+STA @291
+STA @292
+STA @293
+
 JMP .MAIN
 NOP
 

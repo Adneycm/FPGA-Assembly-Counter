@@ -199,7 +199,7 @@ port map(
    saida => saida_edgeDetector_key1
 );
 
-limpaLeitura_key1 <= Wr and Data_Address(8) and Data_Address(7) and Data_Address(6) and Data_Address(5) and Data_Address(4) and Data_Address(3) and Data_Address(2) and Data_Address(1) and Data_Address(0);
+limpaLeitura_key1 <= Wr and Data_Address(8) and Data_Address(7) and Data_Address(6) and Data_Address(5) and Data_Address(4) and Data_Address(3) and Data_Address(2) and Data_Address(1) and not(Data_Address(0));
 
 flipflopkey1 : entity work.flipflop
 port map(

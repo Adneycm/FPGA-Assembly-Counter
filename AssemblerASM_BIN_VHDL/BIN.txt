@@ -46,7 +46,7 @@ tmp(28) := STA & '0' & x"17";	-- #STA @23       	--  MEN[23] = Unidade de Milhar
 tmp(29) := STA & '0' & x"18";	-- #STA @24       	--  MEN[24] = Dezena de Milhar
 tmp(30) := STA & '0' & x"19";	-- #STA @25       	--  MEN[25] = Centena de MIlhar
 
-tmp(31) := JMP & '0' & x"97";	-- #JMP @151	--  Pula para Rotina Principal
+tmp(31) := JMP & '0' & x"D2";	-- #JMP @210	--  Pula para Rotina Principal
 tmp(32) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- INCREMENTA CONTADOR ---------------
@@ -171,7 +171,7 @@ tmp(107) := STA & '1' & x"25";	-- #STA @293
 
 --  ------- FIM INCREMENTO
 
-tmp(108) := JMP & '0' & x"97";	-- #JMP @151	-- JMP .MAIN
+tmp(108) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
 tmp(109) := NOP & '0' & x"00";	-- #NOP
 
 --  --------------- LIMPA LIMITE    ----------------
@@ -195,7 +195,7 @@ tmp(121) := STA & '0' & x"0D";	-- #STA @13       	--  MEN[13] = Unidade de Milha
 tmp(122) := STA & '0' & x"0E";	-- #STA @14       	--  MEN[14] = Dezena de Milhar
 tmp(123) := STA & '0' & x"0F";	-- #STA @15       	--  MEN[15] = Centena de MIlhar
 
-tmp(124) := JMP & '0' & x"84";	-- #JMP @132	-- JMP .SET_UNIDADE
+tmp(124) := JMP & '0' & x"80";	-- #JMP @128	-- JMP .SET_UNIDADE
 
 --  --------------- LIMITE CONTADOR ----------------
 
@@ -203,55 +203,149 @@ tmp(124) := JMP & '0' & x"84";	-- #JMP @132	-- JMP .SET_UNIDADE
 tmp(125) := LDI & '0' & x"01";	-- #LDI $1
 tmp(126) := STA & '1' & x"02";	-- #STA @258                      	--  Indicativo de que esse modo foi selecionado. LEDR9
 
-tmp(127) := LDA & '1' & x"42";	-- #LDA @322                      
-tmp(128) := CEQ & '0' & x"00";	-- #CEQ @0
-tmp(129) := JEQ & '0' & x"93";	-- #JEQ @147	--  Deseleciona Modo : FIM_LIMITE_CONTADOR
-tmp(130) := NOP & '0' & x"00";	-- #NOP
-
 --  Limpa posições de memoria e displays
-tmp(131) := JMP & '0' & x"6E";	-- #JMP @110	-- JMP .LIMPA_LIMITE 
+tmp(127) := JMP & '0' & x"6E";	-- #JMP @110	-- JMP .LIMPA_LIMITE 
 
---  Seta valor Unidade
+--  ------ Seta valor Unidade
 
-tmp(132) := LDI & '0' & x"01";	-- #LDI $1
-tmp(133) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR1 -> Indicativo limite Unidade
 
-tmp(134) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
-tmp(135) := STA & '0' & x"14";	-- #STA @20                      	--  Salva valor limite unidade em MEN[20]
-tmp(136) := STA & '1' & x"20";	-- #STA @288                     	--  HEX0 = Valor da unidade setado
+tmp(128) := LDI & '0' & x"01";	-- #LDI $1
+tmp(129) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR1 -> Indicativo limite Unidade
 
-tmp(137) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta Dezena  ; 0 -> Seta Unidade) 
-tmp(138) := CEQ & '0' & x"01";	-- #CEQ @1 
-tmp(139) := JEQ & '0' & x"8F";	-- #JEQ @143	-- JEQ .SET_DEZENA
-tmp(140) := NOP & '0' & x"00";	-- #NOP
-tmp(141) := JMP & '0' & x"84";	-- #JMP @132	-- JMP .SET_UNIDADE
-tmp(142) := NOP & '0' & x"00";	-- #NOP
+tmp(130) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(131) := STA & '0' & x"14";	-- #STA @20                      	--  Salva valor limite unidade em MEN[20]
+tmp(132) := STA & '1' & x"20";	-- #STA @288                     	--  HEX0 = Valor da unidade setado
 
---  Seta valor unidade
+tmp(133) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta Dezena  ; 0 -> Seta Unidade) 
+tmp(134) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(135) := JEQ & '0' & x"8B";	-- #JEQ @139	-- JEQ .SET_DEZENA
+tmp(136) := NOP & '0' & x"00";	-- #NOP
+tmp(137) := JMP & '0' & x"80";	-- #JMP @128	-- JMP .SET_UNIDADE
+tmp(138) := NOP & '0' & x"00";	-- #NOP
 
-tmp(143) := LDI & '0' & x"02";	-- #LDI $2
-tmp(144) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR2 -> Indicativo limite Dezena
+--  ------ Seta valor Dezena
 
-tmp(145) := JMP & '0' & x"7D";	-- #JMP @125	-- JMP .LIMITE_CONTADOR
-tmp(146) := NOP & '0' & x"00";	-- #NOP
 
---  Desativa modo Limite Contador
+tmp(139) := STA & '1' & x"FE";	-- #STA @510                     	--  Limpa KEY1
 
-tmp(147) := LDI & '0' & x"00";	-- #LDI $0                        	--  LEDR9 = 0
-tmp(148) := STA & '1' & x"02";	-- #STA @258 
-tmp(149) := JMP & '0' & x"97";	-- #JMP @151	-- JMP .MAIN
+tmp(140) := LDI & '0' & x"02";	-- #LDI $2
+tmp(141) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR2 -> Indicativo limite Dezena
+
+tmp(142) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(143) := STA & '0' & x"15";	-- #STA @21                      	--  Salva valor limite dezena em MEN[21]
+tmp(144) := STA & '1' & x"21";	-- #STA @289                     	--  HEX1 = Valor da dezena setado
+
+tmp(145) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta Centena  ; 0 -> Seta Dezena) 
+tmp(146) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(147) := JEQ & '0' & x"97";	-- #JEQ @151	-- JEQ .SET_CENTENA
+tmp(148) := NOP & '0' & x"00";	-- #NOP
+tmp(149) := JMP & '0' & x"8B";	-- #JMP @139	-- JMP .SET_DEZENA
 tmp(150) := NOP & '0' & x"00";	-- #NOP
+
+--  ------ Seta valor Centena
+
+
+tmp(151) := STA & '1' & x"FE";	-- #STA @510                     	--  Limpa KEY1
+
+tmp(152) := LDI & '0' & x"04";	-- #LDI $4
+tmp(153) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR3 -> Indicativo limite Centena
+
+tmp(154) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(155) := STA & '0' & x"16";	-- #STA @22                      	--  Salva valor limite centena em MEN[22]
+tmp(156) := STA & '1' & x"22";	-- #STA @290                     	--  HEX2 = Valor da dezena setado
+
+tmp(157) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta Unidade Milhar  ; 0 -> Seta Centena) 
+tmp(158) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(159) := JEQ & '0' & x"A3";	-- #JEQ @163	-- JEQ .SET_UNIDADE_MILHAR
+tmp(160) := NOP & '0' & x"00";	-- #NOP
+tmp(161) := JMP & '0' & x"97";	-- #JMP @151	-- JMP .SET_CENTENA
+tmp(162) := NOP & '0' & x"00";	-- #NOP
+
+--  ------ Seta valor Unidade de Milhar
+
+
+tmp(163) := STA & '1' & x"FE";	-- #STA @510                     	--  Limpa KEY1
+
+tmp(164) := LDI & '0' & x"08";	-- #LDI $8
+tmp(165) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR4 -> Indicativo limite Centena
+
+tmp(166) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(167) := STA & '0' & x"17";	-- #STA @23                      	--  Salva valor limite unidade de milhar em MEN[23]
+tmp(168) := STA & '1' & x"23";	-- #STA @291                     	--  HEX3 = Valor da dezena setado
+
+tmp(169) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta Dezena Milhar  ; 0 -> Seta Unidade de Milhar) 
+tmp(170) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(171) := JEQ & '0' & x"AF";	-- #JEQ @175	-- JEQ .SET_DEZENA_MILHAR
+tmp(172) := NOP & '0' & x"00";	-- #NOP
+tmp(173) := JMP & '0' & x"A3";	-- #JMP @163	-- JMP .SET_UNIDADE_MILHAR
+tmp(174) := NOP & '0' & x"00";	-- #NOP
+
+--  ------ Seta valor Dezena de Milhar
+
+
+tmp(175) := STA & '1' & x"FE";	-- #STA @510                     	--  Limpa KEY1
+
+tmp(176) := LDI & '0' & x"10";	-- #LDI $16
+tmp(177) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR5 -> Indicativo limite Centena
+
+tmp(178) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(179) := STA & '0' & x"18";	-- #STA @24                      	--  Salva valor limite unidade de milhar em MEN[24]
+tmp(180) := STA & '1' & x"24";	-- #STA @292                     	--  HEX4 = Valor da dezena setado
+
+tmp(181) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+tmp(182) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(183) := JEQ & '0' & x"BB";	-- #JEQ @187	-- JEQ .SET_CENTENA_MILHAR
+tmp(184) := NOP & '0' & x"00";	-- #NOP
+tmp(185) := JMP & '0' & x"AF";	-- #JMP @175	-- JMP .SET_DEZENA_MILHAR
+tmp(186) := NOP & '0' & x"00";	-- #NOP
+
+
+--  ------ Seta valor Dezena de Milhar
+
+
+tmp(187) := STA & '1' & x"FE";	-- #STA @510                     	--  Limpa KEY1
+
+tmp(188) := LDI & '0' & x"20";	-- #LDI $32
+tmp(189) := STA & '1' & x"00";	-- #STA @256                     	--  LEDR5 -> Indicativo limite Centena
+
+tmp(190) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
+tmp(191) := STA & '0' & x"19";	-- #STA @25                      	--  Salva valor limite unidade de milhar em MEN[25]
+tmp(192) := STA & '1' & x"25";	-- #STA @293                     	--  HEX4 = Valor da dezena setado
+
+tmp(193) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+tmp(194) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(195) := JEQ & '0' & x"C7";	-- #JEQ @199	-- JEQ .FIM_LIMITE_CONTADOR
+tmp(196) := NOP & '0' & x"00";	-- #NOP
+tmp(197) := JMP & '0' & x"BB";	-- #JMP @187	-- JMP .SET_CENTENA_MILHAR
+tmp(198) := NOP & '0' & x"00";	-- #NOP
+
+--  ------ Desativa modo Limite Contador
+
+tmp(199) := LDI & '0' & x"00";	-- #LDI $0                        	--  LEDR9 = 0
+tmp(200) := STA & '1' & x"02";	-- #STA @258
+
+--  Limpa Displays
+tmp(201) := LDI & '0' & x"00";	-- #LDI $0
+tmp(202) := STA & '1' & x"20";	-- #STA @288
+tmp(203) := STA & '1' & x"21";	-- #STA @289
+tmp(204) := STA & '1' & x"22";	-- #STA @290
+tmp(205) := STA & '1' & x"23";	-- #STA @291
+tmp(206) := STA & '1' & x"24";	-- #STA @292
+tmp(207) := STA & '1' & x"25";	-- #STA @293
+
+tmp(208) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
+tmp(209) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- ROTINA PRINCIPAL -----------------
 
 
-tmp(151) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
-tmp(152) := CEQ & '0' & x"01";	-- #CEQ @1                        
-tmp(153) := JEQ & '0' & x"21";	-- #JEQ @33	--  APERTADO
-tmp(154) := NOP & '0' & x"00";	-- #NOP
-tmp(155) := LDA & '1' & x"42";	-- #LDA @322                      	--  Lê chave SW9 -> Limite de Incremento
-tmp(156) := CEQ & '0' & x"01";	-- #CEQ @1                           
-tmp(157) := JEQ & '0' & x"7D";	-- #JEQ @125	--  Modo de inserir limite selecionado
-tmp(158) := NOP & '0' & x"00";	-- #NOP
-tmp(159) := JMP & '0' & x"97";	-- #JMP @151	-- JMP .MAIN
-tmp(160) := NOP & '0' & x"00";	-- #NOP
+tmp(210) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
+tmp(211) := CEQ & '0' & x"01";	-- #CEQ @1                        
+tmp(212) := JEQ & '0' & x"21";	-- #JEQ @33	--  APERTADO
+tmp(213) := NOP & '0' & x"00";	-- #NOP
+tmp(214) := LDA & '1' & x"42";	-- #LDA @322                      	--  Lê chave SW9 -> Limite de Incremento
+tmp(215) := CEQ & '0' & x"01";	-- #CEQ @1                           
+tmp(216) := JEQ & '0' & x"7D";	-- #JEQ @125	--  Modo de inserir limite selecionado
+tmp(217) := NOP & '0' & x"00";	-- #NOP
+tmp(218) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
+tmp(219) := NOP & '0' & x"00";	-- #NOP
