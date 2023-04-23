@@ -36,7 +36,7 @@ tmp(21) := STA & '0' & x"0D";	-- #STA @13       	--  MEN[13] = Unidade de Milhar
 tmp(22) := STA & '0' & x"0E";	-- #STA @14       	--  MEN[14] = Dezena de Milhar
 tmp(23) := STA & '0' & x"0F";	-- #STA @15       	--  MEN[15] = Centena de MIlhar
 
-tmp(24) := JMP & '0' & x"67";	-- #JMP @103	--  Pula para Rotina Principal
+tmp(24) := JMP & '0' & x"73";	-- #JMP @115	--  Pula para Rotina Principal
 tmp(25) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- INCREMENTA CONTADOR ---------------
@@ -161,18 +161,43 @@ tmp(100) := STA & '1' & x"25";	-- #STA @293
 
 --  ------- FIM INCREMENTO
 
-tmp(101) := JMP & '0' & x"67";	-- #JMP @103	-- JMP .VERIFICA_KEY0
+tmp(101) := JMP & '0' & x"73";	-- #JMP @115	-- JMP .MAIN
 tmp(102) := NOP & '0' & x"00";	-- #NOP
+
+--  --------------- LIMITE CONTADOR ----------------
+
+
+tmp(103) := LDI & '0' & x"01";	-- #LDI $1
+tmp(104) := STA & '1' & x"02";	-- #STA @258                      	--  Indicativo de que esse modo foi selecionado. LEDR9
+
+tmp(105) := LDA & '1' & x"42";	-- #LDA @322                      
+tmp(106) := CEQ & '0' & x"00";	-- #CEQ @0
+tmp(107) := JEQ & '0' & x"6F";	-- #JEQ @111	--  Deseleciona Modo : FIM_LIMITE_CONTADOR
+tmp(108) := NOP & '0' & x"00";	-- #NOP
+
+--  Subrotina configura unidade
+
+tmp(109) := JMP & '0' & x"67";	-- #JMP @103	-- JMP .LIMITE_CONTADOR
+tmp(110) := NOP & '0' & x"00";	-- #NOP
+
+--  Desativa modo Limite Contador
+
+tmp(111) := LDI & '0' & x"00";	-- #LDI $0                        	--  LEDR9 = 0
+tmp(112) := STA & '1' & x"02";	-- #STA @258 
+tmp(113) := JMP & '0' & x"73";	-- #JMP @115	-- JMP .MAIN
+tmp(114) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- ROTINA PRINCIPAL -----------------
 
 
-
 --  Verifica estado do KEY0
-tmp(103) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
-tmp(104) := CEQ & '0' & x"00";	-- #CEQ @0                        	--  Verifica se foi apertado (KEY0 = 0 ?)
-tmp(105) := JEQ & '0' & x"67";	-- #JEQ @103	--  NAO APERTADO
-tmp(106) := NOP & '0' & x"00";	-- #NOP
-tmp(107) := JSR & '0' & x"1A";	-- #JSR @26	--  APERTADO
-tmp(108) := NOP & '0' & x"00";	-- #NOP
-tmp(109) := NOP & '0' & x"00";	-- #NOP
+tmp(115) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
+tmp(116) := CEQ & '0' & x"01";	-- #CEQ @1                        
+tmp(117) := JEQ & '0' & x"1A";	-- #JEQ @26	--  APERTADO
+tmp(118) := NOP & '0' & x"00";	-- #NOP
+tmp(119) := LDA & '1' & x"42";	-- #LDA @322                      	--  Lê chave SW9 -> Limite de Incremento
+tmp(120) := CEQ & '0' & x"01";	-- #CEQ @1                           
+tmp(121) := JEQ & '0' & x"67";	-- #JEQ @103	--  Modo de inserir limite selecionado
+tmp(122) := NOP & '0' & x"00";	-- #NOP
+tmp(123) := JEQ & '0' & x"73";	-- #JEQ @115	-- JEQ .MAIN
+tmp(124) := NOP & '0' & x"00";	-- #NOP

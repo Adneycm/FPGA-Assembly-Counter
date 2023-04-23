@@ -161,18 +161,43 @@ STA @293
 
 # ------- FIM INCREMENTO
 .FIM_INCREMENTO
-JMP .VERIFICA_KEY0
+JMP .MAIN
+NOP
+
+# --------------- LIMITE CONTADOR ----------------
+.LIMITE_CONTADOR
+
+LDI $1
+STA @258                      # Indicativo de que esse modo foi selecionado. LEDR9
+
+LDA @322                      
+CEQ @0
+JEQ .FIM_LIMITE_CONTADOR      # Deseleciona Modo : FIM_LIMITE_CONTADOR
+NOP
+
+# Subrotina configura unidade
+
+JMP .LIMITE_CONTADOR
+NOP
+
+# Desativa modo Limite Contador
+.FIM_LIMITE_CONTADOR
+LDI $0                        # LEDR9 = 0
+STA @258 
+JMP .MAIN
 NOP
 
 # -------------- ROTINA PRINCIPAL -----------------
 .MAIN
 
-.VERIFICA_KEY0
 # Verifica estado do KEY0
 LDA @352                      # Lê KEY0 
-CEQ @0                        # Verifica se foi apertado (KEY0 = 0 ?)
-JEQ .VERIFICA_KEY0            # NAO APERTADO
+CEQ @1                        
+JEQ .INCREMENTA_CONTADOR      # APERTADO
 NOP
-JSR .INCREMENTA_CONTADOR      # APERTADO
+LDA @322                      # Lê chave SW9 -> Limite de Incremento
+CEQ @1                           
+JEQ .LIMITE_CONTADOR          # Modo de inserir limite selecionado
 NOP
+JMP .MAIN
 NOP
