@@ -1,5 +1,5 @@
 Flow report for contador
-Sun Apr 23 19:54:13 2023
+Sun Apr 23 20:02:07 2023
 Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 
 
@@ -41,15 +41,15 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Sun Apr 23 19:54:07 2023       ;
+; Flow Status                     ; Successful - Sun Apr 23 20:02:01 2023       ;
 ; Quartus Prime Version           ; 20.1.0 Build 711 06/05/2020 SJ Lite Edition ;
 ; Revision Name                   ; contador                                    ;
 ; Top-level Entity Name           ; contador                                    ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CEBA4F23C7                                 ;
 ; Timing Models                   ; Final                                       ;
-; Logic utilization (in ALMs)     ; 395 / 18,480 ( 2 % )                        ;
-; Total registers                 ; 586                                         ;
+; Logic utilization (in ALMs)     ; 391 / 18,480 ( 2 % )                        ;
+; Total registers                 ; 585                                         ;
 ; Total pins                      ; 68 / 224 ( 30 % )                           ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 0 / 3,153,920 ( 0 % )                       ;
@@ -68,7 +68,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 04/23/2023 19:53:16 ;
+; Start date & time ; 04/23/2023 20:01:08 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; contador            ;
 +-------------------+---------------------+
@@ -79,7 +79,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------+----------------------------------------+---------------+-------------+------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name ; Section Id ;
 +-------------------------------------+----------------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID               ; 13718488638210.168229039638050         ; --            ; --          ; --         ;
+; COMPILER_SIGNATURE_ID               ; 13718488638210.168229086740470         ; --            ; --          ; --         ;
 ; MAX_CORE_JUNCTION_TEMP              ; 85                                     ; --            ; --          ; --         ;
 ; MIN_CORE_JUNCTION_TEMP              ; 0                                      ; --            ; --          ; --         ;
 ; NUM_PARALLEL_PROCESSORS             ; All                                    ; --            ; --          ; --         ;
@@ -99,11 +99,11 @@ https://fpgasoftware.intel.com/eula.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:09     ; 1.0                     ; 493 MB              ; 00:00:23                           ;
-; Fitter               ; 00:00:37     ; 1.1                     ; 1567 MB             ; 00:01:07                           ;
-; Assembler            ; 00:00:03     ; 1.0                     ; 487 MB              ; 00:00:03                           ;
-; Timing Analyzer      ; 00:00:05     ; 1.5                     ; 755 MB              ; 00:00:08                           ;
-; Total                ; 00:00:54     ; --                      ; --                  ; 00:01:41                           ;
+; Analysis & Synthesis ; 00:00:09     ; 1.0                     ; 491 MB              ; 00:00:20                           ;
+; Fitter               ; 00:00:39     ; 1.1                     ; 1570 MB             ; 00:01:13                           ;
+; Assembler            ; 00:00:03     ; 1.0                     ; 486 MB              ; 00:00:03                           ;
+; Timing Analyzer      ; 00:00:06     ; 1.5                     ; 755 MB              ; 00:00:07                           ;
+; Total                ; 00:00:57     ; --                      ; --                  ; 00:01:43                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

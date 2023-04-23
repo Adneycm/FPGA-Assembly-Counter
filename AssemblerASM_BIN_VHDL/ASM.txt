@@ -312,8 +312,8 @@ LDA @320                     # Lê chaves
 STA @25                      # Salva valor limite unidade de milhar em MEN[25]
 STA @293                     # HEX4 = Valor da dezena setado
 
-LDA @353                     # Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
-CEQ @1 
+LDA @322                     # Observa SW9 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+CEQ @0 
 JEQ .FIM_LIMITE_CONTADOR
 NOP
 JMP .SET_CENTENA_MILHAR
@@ -323,6 +323,7 @@ NOP
 .FIM_LIMITE_CONTADOR
 LDI $0                        # LEDR9 = 0
 STA @258
+STA @256                      # LEDR0-7 = 0
 
 # Limpa Displays
 LDI $0

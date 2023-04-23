@@ -33,7 +33,7 @@ architecture assincrona of memoriaROM is
         return blocoMemoria is variable tmp : blocoMemoria := (others => (others => '0'));
   begin
 
-  --  ------------------ SETUP --------------------
+--  ------------------ SETUP --------------------
 
 
 
@@ -81,7 +81,7 @@ tmp(28) := STA & '0' & x"17";	-- #STA @23       	--  MEN[23] = Unidade de Milhar
 tmp(29) := STA & '0' & x"18";	-- #STA @24       	--  MEN[24] = Dezena de Milhar
 tmp(30) := STA & '0' & x"19";	-- #STA @25       	--  MEN[25] = Centena de MIlhar
 
-tmp(31) := JMP & '0' & x"D2";	-- #JMP @210	--  Pula para Rotina Principal
+tmp(31) := JMP & '0' & x"D3";	-- #JMP @211	--  Pula para Rotina Principal
 tmp(32) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- INCREMENTA CONTADOR ---------------
@@ -206,7 +206,7 @@ tmp(107) := STA & '1' & x"25";	-- #STA @293
 
 --  ------- FIM INCREMENTO
 
-tmp(108) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
+tmp(108) := JMP & '0' & x"D3";	-- #JMP @211	-- JMP .MAIN
 tmp(109) := NOP & '0' & x"00";	-- #NOP
 
 --  --------------- LIMPA LIMITE    ----------------
@@ -347,8 +347,8 @@ tmp(190) := LDA & '1' & x"40";	-- #LDA @320                     	--  Lê chaves
 tmp(191) := STA & '0' & x"19";	-- #STA @25                      	--  Salva valor limite unidade de milhar em MEN[25]
 tmp(192) := STA & '1' & x"25";	-- #STA @293                     	--  HEX4 = Valor da dezena setado
 
-tmp(193) := LDA & '1' & x"61";	-- #LDA @353                     	--  Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
-tmp(194) := CEQ & '0' & x"01";	-- #CEQ @1 
+tmp(193) := LDA & '1' & x"42";	-- #LDA @322                     	--  Observa SW9 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+tmp(194) := CEQ & '0' & x"00";	-- #CEQ @0 
 tmp(195) := JEQ & '0' & x"C7";	-- #JEQ @199	-- JEQ .FIM_LIMITE_CONTADOR
 tmp(196) := NOP & '0' & x"00";	-- #NOP
 tmp(197) := JMP & '0' & x"BB";	-- #JMP @187	-- JMP .SET_CENTENA_MILHAR
@@ -358,32 +358,33 @@ tmp(198) := NOP & '0' & x"00";	-- #NOP
 
 tmp(199) := LDI & '0' & x"00";	-- #LDI $0                        	--  LEDR9 = 0
 tmp(200) := STA & '1' & x"02";	-- #STA @258
+tmp(201) := STA & '1' & x"00";	-- #STA @256                      	--  LEDR0-7 = 0
 
 --  Limpa Displays
-tmp(201) := LDI & '0' & x"00";	-- #LDI $0
-tmp(202) := STA & '1' & x"20";	-- #STA @288
-tmp(203) := STA & '1' & x"21";	-- #STA @289
-tmp(204) := STA & '1' & x"22";	-- #STA @290
-tmp(205) := STA & '1' & x"23";	-- #STA @291
-tmp(206) := STA & '1' & x"24";	-- #STA @292
-tmp(207) := STA & '1' & x"25";	-- #STA @293
+tmp(202) := LDI & '0' & x"00";	-- #LDI $0
+tmp(203) := STA & '1' & x"20";	-- #STA @288
+tmp(204) := STA & '1' & x"21";	-- #STA @289
+tmp(205) := STA & '1' & x"22";	-- #STA @290
+tmp(206) := STA & '1' & x"23";	-- #STA @291
+tmp(207) := STA & '1' & x"24";	-- #STA @292
+tmp(208) := STA & '1' & x"25";	-- #STA @293
 
-tmp(208) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
-tmp(209) := NOP & '0' & x"00";	-- #NOP
+tmp(209) := JMP & '0' & x"D3";	-- #JMP @211	-- JMP .MAIN
+tmp(210) := NOP & '0' & x"00";	-- #NOP
 
 --  -------------- ROTINA PRINCIPAL -----------------
 
 
-tmp(210) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
-tmp(211) := CEQ & '0' & x"01";	-- #CEQ @1                        
-tmp(212) := JEQ & '0' & x"21";	-- #JEQ @33	--  APERTADO
-tmp(213) := NOP & '0' & x"00";	-- #NOP
-tmp(214) := LDA & '1' & x"42";	-- #LDA @322                      	--  Lê chave SW9 -> Limite de Incremento
-tmp(215) := CEQ & '0' & x"01";	-- #CEQ @1                           
-tmp(216) := JEQ & '0' & x"7D";	-- #JEQ @125	--  Modo de inserir limite selecionado
-tmp(217) := NOP & '0' & x"00";	-- #NOP
-tmp(218) := JMP & '0' & x"D2";	-- #JMP @210	-- JMP .MAIN
-tmp(219) := NOP & '0' & x"00";	-- #NOP
+tmp(211) := LDA & '1' & x"60";	-- #LDA @352                      	--  Lê KEY0 
+tmp(212) := CEQ & '0' & x"01";	-- #CEQ @1                        
+tmp(213) := JEQ & '0' & x"21";	-- #JEQ @33	--  APERTADO
+tmp(214) := NOP & '0' & x"00";	-- #NOP
+tmp(215) := LDA & '1' & x"42";	-- #LDA @322                      	--  Lê chave SW9 -> Limite de Incremento
+tmp(216) := CEQ & '0' & x"01";	-- #CEQ @1                           
+tmp(217) := JEQ & '0' & x"7D";	-- #JEQ @125	--  Modo de inserir limite selecionado
+tmp(218) := NOP & '0' & x"00";	-- #NOP
+tmp(219) := JMP & '0' & x"D3";	-- #JMP @211	-- JMP .MAIN
+tmp(220) := NOP & '0' & x"00";	-- #NOP
 
         return tmp;
     end initMemory;
