@@ -165,8 +165,13 @@ def main(fileASM , fileBIN):
                 label = instrucao.split('.')[-1].strip()
                 number_line = dict_labels[label]
                 
-                number_line_hex = hex(int(number_line))[2:].upper().zfill(2)
-                number_hex_format =  " & '0' & x\"" + number_line_hex + "\""
+                if(number_line > 255):
+                    number_line_hex = hex(int(number_line - 256))[2:].upper().zfill(2)
+                    number_hex_format =  " & '1' & x\"" + number_line_hex + "\""
+                else:
+                    number_line_hex = hex(int(number_line))[2:].upper().zfill(2)
+                    number_hex_format =  " & '0' & x\"" + number_line_hex + "\""
+
                 instrucao = opcode + " @" + str(number_line)
                 
             elif ('RET' in instrucao) or ('NOP' in instrucao):

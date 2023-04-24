@@ -38,7 +38,8 @@ STA @15       # MEN[15] = Centena de MIlhar
 
 # Inicializando posições que guardaram Limite Contador
 # Reservado Endereco 20 a 29
-LDI $0
+# Caso limite contador nao seja selecionado, utilizar o valor padrao 999999
+LDI $9
 STA @20       # MEN[20] = Unidades
 STA @21       # MEN[21] = Dezenas
 STA @22       # MEN[22] = Centenas
@@ -67,7 +68,8 @@ NOP
 SOMA @1        # REGA = Unidade + 1
 STA @10        
 STA @288       # HEX0 = Unidade
-JMP .FIM_INCREMENTO
+
+JMP .VERIFICA_OVERFLOW  # Verifica Overflow
 NOP
 
 # ------- Incrementa  Dezena
@@ -80,12 +82,14 @@ STA @288       # HEX0 = Unidade
 LDA @11        # Dezena já é 9 ? 
 CEQ @9         
 JEQ .CENTENA   # Sim
+NOP
 
 LDA @11        # Carrega dezena
 SOMA @1
 STA @11        
 STA @289       # HEX1 = Dezena
-JMP .FIM_INCREMENTO
+
+JMP .VERIFICA_OVERFLOW  # Verifica Overflow
 NOP
 
 # ------- Incrementa  Centena
@@ -98,12 +102,14 @@ STA @289
 LDA @12        # Centena já é 9?
 CEQ @9
 JEQ .UNIDADE_MILHAR
+NOP
 
 LDA @12        # Carrega centena
 SOMA @1
 STA @12        
 STA @290       # HEX2 = Centena
-JMP .FIM_INCREMENTO
+
+JMP .VERIFICA_OVERFLOW   # Verifica Overflow
 NOP
 
 # ------- Incrementa Unidade de Milhar
@@ -116,13 +122,14 @@ STA @290
 LDA @13        # Unidade de milhar já é 9?
 CEQ @9
 JEQ .DEZENA_MILHAR
+NOP
 
 LDA @13       # Carrega unidade de milhar
 SOMA @1
 STA @13
 STA @291      # HEX3 = Unidade de milhar
 
-JMP .FIM_INCREMENTO
+JMP .VERIFICA_OVERFLOW  # Verifica Overflow
 NOP
 
 # ------- Incrementa Dezena de Milhar
@@ -135,13 +142,14 @@ STA @291
 LDA @14      # Dezena de Milhar já é 9?
 CEQ @9
 JEQ .CENTENA_MILHAR
+NOP
 
 LDA @14       # Carrega dezena de milhar
 SOMA @1
 STA @14
 STA @292      # HEX4 = Unidade de milhar
 
-JMP .FIM_INCREMENTO
+JMP .VERIFICA_OVERFLOW  # Verifica Overflow
 NOP
 
 # ------- Incrementa Centena de Milhar
@@ -154,19 +162,95 @@ STA @292
 LDA @15      # Centena de Milhar já é 9?
 CEQ @9
 JEQ .ZERA_CENTENA_MILHAR
+NOP
 
 LDA @15       # Carrega dezena de milhar
 SOMA @1
 STA @15
 STA @293      # HEX5 = Centena de milhar
 
-JMP .FIM_INCREMENTO
+JMP .VERIFICA_OVERFLOW  # Verifica Overflow
 NOP
 
 #Zera centena de milhar
 .ZERA_CENTENA_MILHAR
 LDI $0
 STA @15
+STA @293
+
+# ------- VERIFICA OVERFLOW
+
+.VERIFICA_OVERFLOW
+# Compara unidade
+LDA @10                  
+CEQ @20
+JEQ .COMPARA_DEZENA
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# Compara dezena
+.COMPARA_DEZENA
+LDA @11                  
+CEQ @21
+JEQ .COMPARA_CENTENA
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# Compara centena
+.COMPARA_CENTENA
+LDA @12                  
+CEQ @22
+JEQ .COMPARA_UNIDADE_MILHAR
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# Compara unidade de milhar
+.COMPARA_UNIDADE_MILHAR
+LDA @13                  
+CEQ @23
+JEQ .COMPARA_DEZENA_MILHAR
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# Compara dezena de milhar
+.COMPARA_DEZENA_MILHAR
+LDA @14                  
+CEQ @24
+JEQ .COMPARA_CENTENA_MILHAR
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# Compara centena de milhar
+.COMPARA_CENTENA_MILHAR
+LDA @14                  
+CEQ @24
+JEQ .INDICA_OVERFLOW
+NOP
+JMP .FIM_INCREMENTO
+NOP
+
+# ------- Indicativos visuais de overflow
+.INDICA_OVERFLOW
+
+#Acende todos os leds
+LDI $255
+STA @256
+LDI $1
+STA @257
+STA @258
+
+#Limpa Displays
+LDI $0
+STA @288
+STA @289
+STA @290
+STA @291
+STA @292
 STA @293
 
 # ------- FIM INCREMENTO
