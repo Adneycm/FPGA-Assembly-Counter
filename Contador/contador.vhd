@@ -183,11 +183,11 @@ port map(
 	RST     => limpaLeitura_key0
 );
 
-KEY0 :  entity work.buffer_3_state_8portas
+KEY0 :  entity work.buffer_3_state_1portas
 port map(
-	entrada => "0000000" & saida_flipflop_key0,
+	entrada => saida_flipflop_key0,
 	habilita => (Saida_Decoder3x8Endereco(0) and Data_Address(5) and Saida_Decoder3x8Bloco(5) and Rd),
-	saida => Data_IN
+	saida => Data_IN(0)
 );
 ------ 
 
@@ -199,7 +199,7 @@ port map(
    saida => saida_edgeDetector_key1
 );
 
-limpaLeitura_key1 <= Wr and Data_Address(8) and Data_Address(7) and Data_Address(6) and Data_Address(5) and Data_Address(4) and Data_Address(3) and Data_Address(2) and Data_Address(1) and Data_Address(0);
+limpaLeitura_key1 <= Wr and Data_Address(8) and Data_Address(7) and Data_Address(6) and Data_Address(5) and Data_Address(4) and Data_Address(3) and Data_Address(2) and Data_Address(1) and not(Data_Address(0));
 
 flipflopkey1 : entity work.flipflop
 port map(
@@ -210,34 +210,34 @@ port map(
 	RST     => limpaLeitura_key1
 );
 
-KEY1 :  entity work.buffer_3_state_8portas
+KEY1 :  entity work.buffer_3_state_1portas
 port map(
-	entrada => "0000000" & saida_flipflop_key1,
+	entrada => saida_flipflop_key1,
 	habilita => (Saida_Decoder3x8Endereco(1) and Data_Address(5) and Saida_Decoder3x8Bloco(5) and Rd),
-	saida => Data_IN
+	saida => Data_IN(0)
 );
 ------
 
 
-KEY2 :  entity work.buffer_3_state_8portas
+KEY2 :  entity work.buffer_3_state_1portas
 port map(
-	entrada => "0000000" & KEY(2),
+	entrada => KEY(2),
 	habilita => (Saida_Decoder3x8Endereco(2) and Data_Address(5) and Saida_Decoder3x8Bloco(5) and Rd),
-	saida => Data_IN
+	saida => Data_IN(0)
 );
 
-KEY3 :  entity work.buffer_3_state_8portas
+KEY3 :  entity work.buffer_3_state_1portas
 port map(
-	entrada => "0000000" & KEY(3),
+	entrada => KEY(3),
 	habilita => (Saida_Decoder3x8Endereco(3) and Data_Address(5) and Saida_Decoder3x8Bloco(5) and Rd),
-	saida => Data_IN
+	saida => Data_IN(0)
 );
 
-FPGA_RESST :  entity work.buffer_3_state_8portas
+FPGA_RESST :  entity work.buffer_3_state_1portas
 port map(
-	entrada => "0000000" & FPGA_RESET_N,
+	entrada => FPGA_RESET_N,
 	habilita => (Saida_Decoder3x8Endereco(4) and Data_Address(5) and Saida_Decoder3x8Bloco(5) and Rd),
-	saida => Data_IN
+	saida => Data_IN(0)
 );
 -------------------------------------------------
 
