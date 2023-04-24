@@ -301,6 +301,7 @@ STA @20                      # Salva valor limite unidade em MEN[20]
 STA @288                     # HEX0 = Valor da unidade setado
 
 LDA @353                     # Observa KEY1 ->  (1 -> Seta Dezena  ; 0 -> Seta Unidade) 
+OP_AND @1 
 CEQ @1 
 JEQ .SET_DEZENA
 NOP
@@ -320,6 +321,7 @@ STA @21                      # Salva valor limite dezena em MEN[21]
 STA @289                     # HEX1 = Valor da dezena setado
 
 LDA @353                     # Observa KEY1 ->  (1 -> Seta Centena  ; 0 -> Seta Dezena) 
+OP_AND @1 
 CEQ @1 
 JEQ .SET_CENTENA
 NOP
@@ -338,7 +340,8 @@ LDA @320                     # Lê chaves
 STA @22                      # Salva valor limite centena em MEN[22]
 STA @290                     # HEX2 = Valor da dezena setado
 
-LDA @353                     # Observa KEY1 ->  (1 -> Seta Unidade Milhar  ; 0 -> Seta Centena) 
+LDA @353                     # Observa KEY1 ->  (1 -> Seta Unidade Milhar  ; 0 -> Seta Centena)
+OP_AND @1  
 CEQ @1 
 JEQ .SET_UNIDADE_MILHAR
 NOP
@@ -358,6 +361,7 @@ STA @23                      # Salva valor limite unidade de milhar em MEN[23]
 STA @291                     # HEX3 = Valor da dezena setado
 
 LDA @353                     # Observa KEY1 ->  (1 -> Seta Dezena Milhar  ; 0 -> Seta Unidade de Milhar) 
+OP_AND @1 
 CEQ @1 
 JEQ .SET_DEZENA_MILHAR
 NOP
@@ -377,6 +381,7 @@ STA @24                      # Salva valor limite unidade de milhar em MEN[24]
 STA @292                     # HEX4 = Valor da dezena setado
 
 LDA @353                     # Observa KEY1 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+OP_AND @1 
 CEQ @1 
 JEQ .SET_CENTENA_MILHAR
 NOP
@@ -397,6 +402,7 @@ STA @25                      # Salva valor limite unidade de milhar em MEN[25]
 STA @293                     # HEX4 = Valor da dezena setado
 
 LDA @322                     # Observa SW9 ->  (1 -> Seta  Centena de Milhar  ; 0 -> Seta Dezena de Milhar) 
+OP_AND @1 
 CEQ @0 
 JEQ .FIM_LIMITE_CONTADOR
 NOP
@@ -421,16 +427,30 @@ STA @293
 JMP .MAIN
 NOP
 
+# -------------- REINICIA CONTAGEM -----------------
+
+.REINICIA_CONTAGEM  
+STA @509
+JMP .SETUP
+NOP
+
 # -------------- ROTINA PRINCIPAL -----------------
 .MAIN
 
 LDA @352                      # Lê KEY0 
+OP_AND @1
 CEQ @1                        
 JEQ .INCREMENTA_CONTADOR      # APERTADO
 NOP
 LDA @322                      # Lê chave SW9 -> Limite de Incremento
-CEQ @1                           
+OP_AND @1 
+CEQ @1                          
 JEQ .LIMITE_CONTADOR          # Modo de inserir limite selecionado
+NOP
+LDA @356                      # FPGA_RESET : Limpa Contador e reinicia contagem
+OP_AND @1
+CEQ @1 
+JEQ .REINICIA_CONTAGEM        
 NOP
 JMP .MAIN
 NOP
